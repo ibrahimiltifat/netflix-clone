@@ -4,17 +4,19 @@ import "./Row.css";
 
 const baseURL = "https://image.tmdb.org/t/p/original/";
 
-function Row({ title, fetchURL }) {
+function Row({ title, fetchUrl,isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const request = await axios.get(fetchURL);
+      const request = await axios.get(
+        `https://api.themoviedb.org/3${fetchUrl}`
+      );
       setMovies(request.data.results);
       return request;
     }
     fetchData();
-  }, [fetchURL]);
+  }, [fetchUrl]);
 
   console.log(movies);
 
@@ -25,8 +27,8 @@ function Row({ title, fetchURL }) {
         {movies.map((movie) => (
           <img
             key={movie.id}
-            className="row_poster"
-            src={`${baseURL}${movie.poster_path}`}
+            className={`row_poster ${isLargeRow && "row_posterLarge"}`}
+            src={`${baseURL}${isLargeRow? movie.poster_path: movie.backdrop_path}`}
             alt={movie.name}
           />
         ))}
